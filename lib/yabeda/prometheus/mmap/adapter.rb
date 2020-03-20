@@ -26,7 +26,12 @@ module Yabeda
 
     def register_counter!(metric)
       validate_metric!(metric)
-      registry.counter(build_name(metric), metric.comment)
+
+      registry.counter(
+        build_name(metric),
+        metric.comment,
+        build_tags(metric.tags)
+      )
     end
 
     def perform_counter_increment!(metric, tags, value)
@@ -35,23 +40,40 @@ module Yabeda
 
     def register_gauge!(metric)
       validate_metric!(metric)
-      raise 'not implemented'
+
+      registry.gauge(
+        build_name(metric),
+        metric.comment,
+        build_tags(metric.tags)
+      )
     end
 
     def perform_gauge_set!(metric, tags, value)
-      raise 'not implemented'
+      registry.get(build_name(metric)).set(tags, value)
     end
 
     def register_histogram!(metric)
-      raise 'not implemented'
+      buckets = metric.buckets || ::Prometheus::Client::Histogram::DEFAULT_BUCKETS
+      registry.histogram(
+        build_name(metric),
+        metric.comment,
+        build_tags(metric.tags),
+        buckets
+      )
     end
 
     def perform_histogram_measure!(metric, tags, value)
-      raise 'not implemented'
+      registry.get(build_name(metric)).observe(tags, value)
     end
 
     def build_name(metric)
       [metric.group, metric.name, metric.unit].compact.join('_').to_sym
+    end
+
+    def build_tags(tags)
+      Array(tags).each_with_object({}) do |tag, hash|
+        hash[tag] = nil
+      end
     end
 
     def validate_metric!(metric)
