@@ -75,7 +75,7 @@ module Yabeda
           raise ArgumentError, 'Prometheus require metrics to have comments'
         end
 
-        Yabeda.register_adapter(:'prometheus-mmap', new)
+        Yabeda.register_adapter(:prometheus, new)
       end
     end
   end

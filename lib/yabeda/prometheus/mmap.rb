@@ -4,7 +4,7 @@ require 'yabeda'
 require 'prometheus/client'
 require 'yabeda/prometheus/mmap/version'
 require 'yabeda/prometheus/mmap/adapter'
-require 'yabeda/prometheus/mmap/exporter'
+require 'yabeda/prometheus/exporter'
 
 module Yabeda
   module Prometheus
