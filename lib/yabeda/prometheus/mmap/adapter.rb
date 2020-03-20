@@ -8,20 +8,8 @@ require "yabeda/base_adapter"
 
 module Yabeda
   class Prometheus::Mmap::Adapter < BaseAdapter
-    class UndeclaredMetricTags < RuntimeError
-      attr_reader :message
-
-      def initialize(metric_name, caused_exception)
-        @message = <<~MESSAGE.strip
-          Prometheus requires all used tags to be declared at metric registration time. \
-          Please add `tags` option to the declaration of metric `#{metric_name}`. \
-          Error: #{caused_exception.message}
-        MESSAGE
-      end
-    end
-
     def registry
-      @registry ||= ::Prometheus::Client.registry
+      @registry ||= ::Yabeda::Prometheus::Mmap.registry
     end
 
     def register_counter!(metric)

@@ -1,9 +1,13 @@
 # frozen_string_literal: true
 
+require 'rack'
+require 'prometheus/client/rack/collector'
+require 'prometheus/client/rack/exporter'
+
 module Yabeda
   module Prometheus
     # Rack application or middleware that provides metrics exposition endpoint
-    class Mmap::Exporter
+    class Mmap::Exporter < ::Prometheus::Client::Rack::Exporter
       NOT_FOUND_HANDLER = lambda do |_env|
         [404, { "Content-Type" => "text/plain" }, ["Not Found\n"]]
       end.freeze
@@ -11,7 +15,7 @@ module Yabeda
       class << self
         # Allows to use middleware as standalone rack application
         def call(env)
-          @app ||= new(NOT_FOUND_HANDLER, path: "/")
+          @app ||= new(NOT_FOUND_HANDLER, path: "/metrics")
           @app.call(env)
         end
 
@@ -31,6 +35,7 @@ module Yabeda
           Rack::Builder.new do
             use Rack::CommonLogger
             use Rack::ShowExceptions
+            use Prometheus::Client::Rack::Collector
             use exporter, path: path
             run NOT_FOUND_HANDLER
           end
@@ -38,7 +43,7 @@ module Yabeda
       end
 
       def initialize(app, options = {})
-        super(app, options.merge(registry: Yabeda::Prometheus.registry))
+        super(app, options.merge(registry: Yabeda::Prometheus::Mmap.registry))
       end
 
       def call(env)
