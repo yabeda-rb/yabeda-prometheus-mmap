@@ -36,7 +36,6 @@ module Yabeda
             Rack::Builder.new do
               use Rack::CommonLogger
               use Rack::ShowExceptions
-              use Prometheus::Client::Rack::Collector
               use exporter, path: path
               run NOT_FOUND_HANDLER
             end
