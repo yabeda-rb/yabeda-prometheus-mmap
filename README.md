@@ -1,8 +1,15 @@
-# Yabeda::Prometheus::Mmap
+<a href="https://amplifr.com/?utm_source=yabeda-prometheus-mmap">
+  <img width="100" height="140" align="right"
+    alt="Sponsored by Amplifr" src="https://amplifr-direct.s3-eu-west-1.amazonaws.com/social_images/image/37b580d9-3668-4005-8d5a-137de3a3e77c.png" />
+</a>
 
-Welcome to your new gem! In this directory, you'll find the files you need to be able to package up your Ruby library into a gem. Put your Ruby code in the file `lib/yabeda/prometheus/mmap`. To experiment with that code, run `bin/console` for an interactive prompt.
+# Yabeda::[Prometheus]::Mmap
 
-TODO: Delete this and the text above, and describe your gem
+
+Adapter for easy exporting your collected metrics from your application to the [Prometheus]!
+It is based on [Prometheus Ruby Mmap Client](https://gitlab.com/gitlab-org/prometheus-client-mmap), that uses mmap'ed files to share metrics from multiple processes.
+This allows efficient metrics processing for Ruby web apps running in multiprocess setups like Unicorn or Puma (clustered mode).
+
 
 ## Installation
 
@@ -14,27 +21,57 @@ gem 'yabeda-prometheus-mmap'
 
 And then execute:
 
-    $ bundle install
-
-Or install it yourself as:
-
-    $ gem install yabeda-prometheus-mmap
+    $ bundle
 
 ## Usage
 
-TODO: Write usage instructions here
+ 1. Exporting from running web servers:
 
-## Development
+    Place following in your `config.ru` _before_ running your application:
 
-After checking out the repo, run `bin/setup` to install dependencies. Then, run `rake spec` to run the tests. You can also run `bin/console` for an interactive prompt that will allow you to experiment.
+    ```ruby
+    require 'yabeda/prometheus/mmap'
 
-To install this gem onto your local machine, run `bundle exec rake install`. To release a new version, update the version number in `version.rb`, and then run `bundle exec rake release`, which will create a git tag for the version, push git commits and tags, and push the `.gem` file to [rubygems.org](https://rubygems.org).
+    use Yabeda::Prometheus::Exporter
+    ```
+
+    Metrics will be available on `/metrics` path (configured by `:path` option).
+
+    Also you can mount it in Rails application routes as standalone Rack application.
+
+ 2. Run web-server from long-running processes (delayed jobs, …):
+
+    ```ruby
+    require 'yabeda/prometheus/mmap'
+
+    Yabeda::Prometheus::Exporter.start_metrics_server!
+    ```
+
+    WEBrick will be launched in separate thread and will serve metrics on `/metrics` path.
+
+    See [yabeda-sidekiq] for example.
+
+    Listening address is configured via `PROMETHEUS_EXPORTER_BIND` env variable (default is `0.0.0.0`).
+
+    Port is configured by `PROMETHEUS_EXPORTER_PORT` or `PORT` variables (default is `9394`).
+
+
+## Development with Docker
+
+Get local development environment working and tests running is very easy with docker-compose:
+```bash
+docker-compose run app bundle
+docker-compose run app bundle exec rspec
+```
 
 ## Contributing
 
-Bug reports and pull requests are welcome on GitHub at https://github.com/[USERNAME]/yabeda-prometheus-mmap.
-
+Bug reports and pull requests are welcome on GitHub at https://github.com/yabeda-rb/yabeda-prometheus-mmap.
 
 ## License
 
 The gem is available as open source under the terms of the [MIT License](https://opensource.org/licenses/MIT).
+
+[Prometheus]: https://prometheus.io/ "Open-source monitoring solution"
+[yabeda-sidekiq]: https://github.com/yabeda-rb/yabeda-sidekiq
+
