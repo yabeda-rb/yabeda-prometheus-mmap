@@ -16,7 +16,7 @@ module Yabeda
         class << self
           # Allows to use middleware as standalone rack application
           def call(env)
-            @app ||= new(NOT_FOUND_HANDLER, path: '/metrics')
+            @app ||= new(NOT_FOUND_HANDLER, path: '/')
             @app.call(env)
           end
 
