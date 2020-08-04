@@ -44,7 +44,7 @@ RSpec.describe Yabeda::Prometheus::Mmap do
 
   context 'rack' do
     it do
-      rack = Yabeda::Prometheus::Mmap::Exporter
+      rack = Yabeda::Prometheus::Mmap::Exporter.rack_app
       env = { 'REQUEST_METHOD' => 'GET', 'PATH_INFO' => '/metrics' }
       response = rack.call(env).last.join
       expect(response).to include('test_counter')
