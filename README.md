@@ -3,7 +3,7 @@
     alt="Sponsored by Amplifr" src="https://amplifr-direct.s3-eu-west-1.amazonaws.com/social_images/image/37b580d9-3668-4005-8d5a-137de3a3e77c.png" />
 </a>
 
-# Yabeda::[Prometheus]::Mmap
+# ![`Yabeda::Prometheus::Mmap`](./yabeda-prometheus-mmap-logo.png)
 
 
 Adapter for easy exporting your collected metrics from your application to the [Prometheus]!
