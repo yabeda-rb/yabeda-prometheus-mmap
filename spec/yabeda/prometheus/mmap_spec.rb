@@ -1,6 +1,5 @@
 # frozen_string_literal: true
 
-# rubocop: disable Metrics/BlockLength
 RSpec.describe Yabeda::Prometheus::Mmap do
   it 'has a version number' do
     expect(Yabeda::Prometheus::Mmap::VERSION).not_to be nil
@@ -53,4 +52,3 @@ RSpec.describe Yabeda::Prometheus::Mmap do
     end
   end
 end
-# rubocop: enable Metrics/BlockLength
