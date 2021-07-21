@@ -55,6 +55,11 @@ And then execute:
 
     Port is configured by `PROMETHEUS_EXPORTER_PORT` or `PORT` variables (default is `9394`).
 
+## Debugging metrics
+
+ - Time of already collected metrics rendering in response for Prometheus: `yabeda_prometheus_mmap_render_duration`.
+
+These are only enabled in debug mode. See [Yabeda debugging metrics](https://github.com/yabeda-rb/yabeda#debugging-metrics) on how to enable it  (e.g. by specifying `YABEDA_DEBUG=true` in your environment variables).
 
 ## Development with Docker
 

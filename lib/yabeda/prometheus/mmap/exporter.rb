@@ -47,8 +47,17 @@ module Yabeda
         end
 
         def call(env)
-          Yabeda.collectors.each(&:call) if env['PATH_INFO'] == path
-          super
+          ::Yabeda.collect! if env['PATH_INFO'] == path
+
+          if ::Yabeda.debug?
+            result = nil
+            ::Yabeda.yabeda_prometheus_mmap.render_duration.measure({}) do
+              result = super
+            end
+            result
+          else
+            super
+          end
         end
       end
     end

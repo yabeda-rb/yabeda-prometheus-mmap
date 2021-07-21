@@ -28,5 +28,5 @@ Gem::Specification.new do |spec|
   spec.require_paths = ['lib']
 
   spec.add_dependency 'prometheus-client-mmap'
-  spec.add_dependency 'yabeda', '~> 0.5'
+  spec.add_dependency 'yabeda', '~> 0.10'
 end
