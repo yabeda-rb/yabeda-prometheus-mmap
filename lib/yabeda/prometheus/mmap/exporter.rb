@@ -34,7 +34,7 @@ module Yabeda
 
           def rack_app(exporter = self, path: '/metrics')
             ::Rack::Builder.new do
-              use ::Rack::CommonLogger
+              use ::Rack::CommonLogger if ENV['PROMETHEUS_EXPORTER_LOG_REQUESTS'] != 'false'
               use ::Rack::ShowExceptions
               use exporter, path: path
               run NOT_FOUND_HANDLER
