@@ -32,9 +32,19 @@ RSpec.describe Yabeda::Prometheus::Mmap do
       expect(Yabeda.test_counter.values).to eq(
         { { ctag: :'ctag-value' } => 1 }
       )
+    end
+  end
+
+  context 'gauge' do
+    it do
       expect(Yabeda.test_gauge.values).to eq(
         { { gtag: :'gtag-value' } => 123 }
       )
+    end
+  end
+
+  context 'histogram' do
+    it do
       expect(Yabeda.test_histogram.values).to eq(
         { { htag: :'htag-value' } => 7 }
       )
