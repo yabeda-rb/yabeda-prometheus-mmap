@@ -35,7 +35,8 @@ module Yabeda
           registry.gauge(
             build_name(metric),
             metric.comment,
-            build_tags(metric.tags)
+            build_tags(metric.tags),
+            metric.aggregation || :all
           )
         end
 
