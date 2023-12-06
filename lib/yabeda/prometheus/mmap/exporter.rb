@@ -23,12 +23,30 @@ module Yabeda
           def start_metrics_server!
             Thread.new do
               default_port = ENV.fetch('PORT', 9394)
-              ::Rack::Handler::WEBrick.run(
+              rack_handler = determine_rack_handler
+
+              rack_handler.run(
                 rack_app,
                 Host: ENV['PROMETHEUS_EXPORTER_BIND'] || '0.0.0.0',
                 Port: ENV.fetch('PROMETHEUS_EXPORTER_PORT', default_port),
                 AccessLog: []
               )
+            end
+          end
+
+          def determine_rack_handler
+            rack_version = Gem.loaded_specs['rack'].version
+
+            if rack_version >= Gem::Version.new('3.0')
+              begin
+                Gem::Specification.find_by_name('rackup')
+                require 'rackup'
+                ::Rackup::Handler::WEBrick
+              rescue Gem::MissingSpecError
+                ::Rack::Handler::WEBrick
+              end
+            else
+              ::Rack::Handler::WEBrick
             end
           end
 
