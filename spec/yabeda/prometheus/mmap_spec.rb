@@ -13,7 +13,8 @@ RSpec.describe Yabeda::Prometheus::Mmap do
 
       gauge :gauge,
             comment: 'Gauge',
-            tags: [:gtag]
+            tags: [:gtag],
+            aggregation: :sum
 
       histogram :histogram,
                 comment: 'Histogram',
@@ -32,9 +33,28 @@ RSpec.describe Yabeda::Prometheus::Mmap do
       expect(Yabeda.test_counter.values).to eq(
         { { ctag: :'ctag-value' } => 1 }
       )
+    end
+  end
+
+  context 'gauge' do
+    it do
       expect(Yabeda.test_gauge.values).to eq(
         { { gtag: :'gtag-value' } => 123 }
       )
+    end
+
+    it 'passes aggregation to multiprocess_mode' do
+      expect(
+        Yabeda
+        .adapters[:prometheus].registry
+        .instance_variable_get(:@metrics)[:test_gauge]
+        .instance_variable_get(:@multiprocess_mode)
+      ).to eq(:livesum)
+    end
+  end
+
+  context 'histogram' do
+    it do
       expect(Yabeda.test_histogram.values).to eq(
         { { htag: :'htag-value' } => 7 }
       )

@@ -35,7 +35,8 @@ module Yabeda
           registry.gauge(
             build_name(metric),
             metric.comment,
-            build_tags(metric.tags)
+            build_tags(metric.tags),
+            gauge_aggregation_mode(metric.aggregation)
           )
         end
 
@@ -83,6 +84,21 @@ module Yabeda
                       tags: %i[], unit: :seconds,
                       buckets: [0.001, 0.005, 0.01, 0.025, 0.05, 0.1, 0.25, 0.5, 1, 2.5, 5, 10],
                       comment: 'Time required to render all metrics in Prometheus format'
+          end
+        end
+
+        private
+
+        def gauge_aggregation_mode(yabeda_mode)
+          case yabeda_mode
+          when nil, :most_recent # TODO: Switch to most_recent when supported: https://gitlab.com/gitlab-org/ruby/gems/prometheus-client-mmap/-/issues/36
+            :all
+          when :min, :max, :all, :liveall
+            yabeda_mode
+          when :sum
+            :livesum
+          else
+            raise ArgumentError, "Unsupported gauge aggregation mode #{yabeda_mode.inspect}"
           end
         end
 
