@@ -14,7 +14,7 @@ RSpec.describe Yabeda::Prometheus::Mmap do
       gauge :gauge,
             comment: 'Gauge',
             tags: [:gtag],
-            aggregation: :max
+            aggregation: :sum
 
       histogram :histogram,
                 comment: 'Histogram',
@@ -49,7 +49,7 @@ RSpec.describe Yabeda::Prometheus::Mmap do
         .adapters[:prometheus].registry
         .instance_variable_get(:@metrics)[:test_gauge]
         .instance_variable_get(:@multiprocess_mode)
-      ).to eq(:max)
+      ).to eq(:livesum)
     end
   end
 
