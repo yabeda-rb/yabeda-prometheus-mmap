@@ -5,6 +5,22 @@ All notable changes to this project will be documented in this file.
 The format is based on [Keep a Changelog](http://keepachangelog.com/en/1.0.0/)
 and this project adheres to [Semantic Versioning](http://semver.org/spec/v2.0.0.html).
 
+## 0.4.0 - 2023-12-11
+
+### Added
+
+- Support for gauge aggregation setting [#6](https://github.com/yabeda-rb/yabeda-prometheus-mmap/pull/6) by [@andreaswachowski][].
+
+### Fixed
+
+- Compatibility with Rack 3 and Rack 2. [#8](https://github.com/yabeda-rb/yabeda-prometheus-mmap/pull/8) by [@aroop][].
+
+## 0.3.0 - 2021-08-27
+
+### Added
+
+- Possibility to disable metrics web server logs [@bibendi]
+
 ## 0.2.0 - 2021-07-21
 
 ### Added
@@ -34,3 +50,6 @@ Initial release. [@dsalahutdinov][]
 [@macchiang]: https://github.com/macchiang "Mac"
 [@dsalahutdinov]: https://github.com/dsalahutdinov "Salahutdinov Dmitry"
 [@Envek]: https://github.com/Envek "Andrey Novikov"
+[@bibendi]: https://github.com/bibendi/ "Misha Merkushin"
+[@andreaswachowski]: https://github.com/andreaswachowski "Andreas Wachowski"
+[@aroop]: https://github.com/aroop "Ajay Kumar G"
